@@ -1,0 +1,49 @@
+{% extends 'UI/course/course_dashboard.html' %}
+{% block assign_teacher_form %}
+<div class="card border p-0 m-0">
+    <div class="card-header text-white py-3" style="background-color: var(--color-primary); border-bottom: none;">
+        <div class="d-flex justify-content-between align-items-center">
+            <h6 class="mb-0 fw-bold">
+                Faculty Assignment
+            </h6>
+            <a href="{% url 'course_dashboard' %}" class="btn btn-sm btn-light fw-medium px-3"
+               style="color: var(--color-primary); font-size: 0.8rem; border-radius: 4px;">
+                Add Course
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <form action="{% url 'assign_teacher' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label small fw-bold text-muted">Select
+                    Course</label>
+                <select name="course_id" class="form-select" required>
+                    <option value selected disabled>Choose a course...</option>
+                    {% for course in courses %}
+                    <option value="{{ course.id }}">
+                        {{ course.name }} ({{course.code }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="form-label small fw-bold text-muted">Select
+                    Teacher</label>
+                <select name="teacher_id" class="form-select" required>
+                    <option value selected disabled>Choose a teacher...</option>
+                    {% for teacher in teachers %}
+                    <option value="{{ teacher.id }}">
+                        {{ teacher.username}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn fw-bold" style="background: var(--color-primary); color: white;">Confirm
+                    Assignment
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

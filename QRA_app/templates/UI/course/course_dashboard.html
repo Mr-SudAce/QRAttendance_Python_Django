@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block main_title %}Course Dashboard{% endblock %}
+{% block main_content %}
+
+<div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm"
+                style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%); color: white;">
+                <h2 class="fw-bold mb-1">Course Management</h2>
+                <p class="opacity-75 mb-0">Configure organizational units and
+                    departments for the institution.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 m-0">
+        <div class="col-lg-8 m-0 ps-0">
+            {% include 'UI/course/course_list.html' %}
+        </div>
+
+        <div class="col-lg-4 m-0 pe-0">
+            {% if request.resolver_match.url_name == 'assign_teacher' %}
+                {% block assign_teacher_form %}{% endblock %}
+            {% else %}
+                {% include 'UI/course/addcourse.html' %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

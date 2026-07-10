@@ -1,0 +1,168 @@
+{% load static %}
+{% include 'UI/navbar.html' %}
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+<link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="{% static 'CSS/index.css' %}">
+
+<div class="container"
+    style="width: 1200px !important; background-color: var(--bg-color); min-height:80vh;">
+
+    <div
+        class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom"
+        style="border-color: #f1f5f9 !important;">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0"
+                style="font-size: 0.8rem; background: transparent; padding: 0;">
+                <li class="breadcrumb-item"><a
+                        href="{% url 'course_dashboard' %}"
+                        class="text-decoration-none text-muted">Courses</a></li>
+                <li class="breadcrumb-item active fw-medium" aria-current="page"
+                    style="color: var(--color-primary);">{{ course.code }}</li>
+            </ol>
+        </nav>
+        <span class="badge text-uppercase tracking-wider px-2 py-1 rounded-2"
+            style="background-color: rgba(16, 185, 129, 0.08); color: var(--color-secondary); font-size: 0.65rem; border: 1px solid rgba(16, 185, 129, 0.15);">
+            Active System Core
+        </span>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-5 col-lg-4">
+            <div class="position-sticky" style="top: 1rem;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-journal-text text-muted"
+                        style="font-size: 1rem;"></i>
+                    <span
+                        class="text-uppercase tracking-wider fw-semibold text-muted"
+                        style="font-size: 0.65rem; letter-spacing: 0.05em;">
+                        Module Specification
+                    </span>
+                </div>
+
+                <h1 class="h2 mb-3 fw-extrabold tracking-tight"
+                    style="color: var(--color-primary); letter-spacing: -0.5px;">
+                    {{ course.name|title|default:"N/A" }}
+                </h1>
+
+                <div class="d-flex flex-column gap-2.5 pt-3 border-top"
+                    style="border-color: #f1f5f9 !important;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-hash text-muted py-0.5"></i>
+                        <div style="font-size: 0.85rem;">
+                            <span class="text-muted">Code:</span>
+                            <span class="font-monospace fw-bold ms-1"
+                                style="color: var(--text-dark);">
+                                {{ course.code|default:"N/A" }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-building text-muted py-0.5"></i>
+                        <div style="font-size: 0.85rem;">
+                            <span class="text-muted">Hub:</span>
+                            <span class="fw-medium ms-1"
+                                style="color: var(--text-dark);">
+                                {{ course.department.name }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 mt-4 border-top d-flex flex-wrap gap-2"
+                    style="border-color: #f1f5f9 !important;">
+                    {% if request.user.role == 'superuser' %}
+                    <a href="{% url 'superuser_dashboard' %}"
+                        class="btn btn-sm px-2.5 py-1.5 fw-bold d-inline-flex align-items-center gap-2 rounded-2 text-white border-0"
+                        style="background-color: var(--color-primary); font-size: 0.8rem;">
+                        <i class="bi bi-grid-1x2"></i> System Control
+                    </a>
+                    <a href="{% url 'course_dashboard' %}"
+                        class="btn btn-sm px-2.5 py-1.5 fw-medium d-inline-flex align-items-center gap-1.5 rounded-2 text-secondary bg-light border"
+                        style="font-size: 0.8rem; border-color: var(--border-color) !important;">
+                        <i class="bi bi-arrow-left"></i> Directory
+                    </a>
+                    {% elif request.user.role == 'teacher' %}
+                    <a href="{% url 'teacher_dashboard' %}"
+                        class="btn btn-sm px-2.5 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5 rounded-2 text-white border-0"
+                        style="background-color: var(--color-primary); font-size: 0.8rem;">
+                        <i class="bi bi-cpu"></i> Instructor Hub
+                    </a>
+                    <a href="{% url 'course_dashboard' %}"
+                        class="btn btn-sm px-2.5 py-1.5 fw-medium d-inline-flex align-items-center gap-1.5 rounded-2 text-secondary bg-light border"
+                        style="font-size: 0.8rem; border: 1px solid var(--color-primary) !important;">
+                        <i class="bi bi-arrow-left"></i> Directory
+                    </a>
+                    {% else %}
+                    <a href="{% url 'student_dashboard' %}"
+                        class="btn btn-sm px-2.5 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5 rounded-2 text-white border-0"
+                        style="background-color: var(--color-primary); font-size: 0.8rem;">
+                        <i class="bi bi-house-door"></i> Terminal Home
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7 col-lg-8">
+            <h2
+                class="h6 text-uppercase tracking-wider fw-bold text-muted mb-2.5"
+                style="font-size: 0.75rem; letter-spacing: 0.05em;">
+                Assigned Personnel Terminal
+            </h2>
+
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+                {% for assignment in course.courseassignment_set.all %}
+                <div class="col">
+                    <div class="list-group list-group-flush border rounded-2"
+                        style="border-color: #e2e8f0 !important; background-color: transparent;">
+                        <div
+                            class="list-group-item px-3 py-2 d-flex align-items-center justify-content-between border-0 bg-transparent style-row">
+                            <div class="d-flex align-items-center gap-2">
+                                <div
+                                    class="rounded-circle d-flex align-items-center justify-content-center fw-bold text-white me-2.5"
+                                    style="width: 34px; height: 34px; background-color: var(--color-primary); font-size: 0.8rem; flex-shrink: 0;">
+                                    {{ assignment.teacher.username|slice:":1"|upper}}
+                                </div>
+                                <div>
+                                    <div class="fw-bold m-0"
+                                        style="font-size: 0.85rem; color: var(--text-dark); line-height: 1.3;">
+                                        {{assignment.teacher.get_full_name|default:assignment.teacher.username}}
+                                    </div>
+                                    <div class="text-muted font-monospace"
+                                        style="font-size: 0.7rem;">
+                                        ID: {{assignment.teacher.username}}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <span
+                                class="d-flex align-items-center gap-1.5 small fw-semibold ms-2"
+                                style="color: var(--color-secondary); font-size: 0.72rem; flex-shrink: 0;">
+                                <span class="rounded-circle d-inline-block"
+                                    style="width: 5px; height: 5px; background-color: var(--color-secondary);"></span>
+                                Controller
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 w-100">
+                    <div
+                        class="text-center py-4 text-muted border border-dashed rounded-2"
+                        style="border-color: #e2e8f0 !important;">
+                        <i class="bi bi-shield-slash d-block fs-4 mb-1"
+                            style="opacity: 0.4;"></i>
+                        <span class="small text-muted"
+                            style="font-size: 0.8rem;">No system instructors
+                            assigned to this module state.</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>

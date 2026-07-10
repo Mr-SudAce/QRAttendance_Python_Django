@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block main_title %}Attendance History{% endblock %}
+{% block main_content %}
+<div>
+    <!-- Header -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm p-4" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 80%); color: white;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="fw-bold mb-1">Attendance History</h2>
+                    <p class="opacity-75 mb-0">Tracking your academic presence across all courses.</p>
+                </div>
+                <a href="{% url 'student_dashboard' %}" class="btn btn-light btn-sm fw-bold">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Scan
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Records Table -->
+<div class="card border-0 shadow-sm p-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light border">
+                    <tr>
+                        <th class="ps-4 py-3">Course Name</th>
+                        <th class="py-3">Status</th>
+                        <th class="py-3">Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in attendance %}
+                    <tr>
+                        <td class="ps-4 fw-bold text-dark">
+                            {{ record.attendance_session.course.name }}
+                        </td>
+                        <td>
+                            {% if record.status == 'present' %}
+                                <span class="badge bg-success-soft text-success border border-success px-3">Present</span>
+                            {% else %}
+                                <span class="badge bg-danger-soft text-danger border border-danger px-3">{{ record.status|title }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted small">
+                            {{ record.created_at|date:"M d, Y" }} at {{ record.created_at|date:"H:i" }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center py-5 text-muted">No attendance records found yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

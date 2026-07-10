@@ -1,0 +1,77 @@
+<div class="card border p-0 m-0">
+    <div class="card-body">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-2 pb-2">
+            <h5 class="mb-0 fw-bold text-dark">Academic Records</h5>
+            
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <nav>
+                    <div class="nav nav-pills gap-1" id="nav-tab" role="tablist">
+                        <style>
+                            .nav-pills .nav-link.active { background-color: var(--color-primary); color: white !important; }
+                            .nav-pills .nav-link { color: var(--color-secondary); border: 1px solid var(--border-color); font-size: 0.85rem; padding: 0.4rem 0.75rem; }
+                        </style>
+                        <button class="nav-link active"
+                                id="nav-courses-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-courses"
+                                type="button" role="tab">Courses
+                        </button>
+                        <button class="nav-link"
+                                id="nav-assignments-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-assignments"
+                                type="button" role="tab">Assignments
+                        </button>
+                    </div>
+                </nav>
+                
+                <form method="get" id="searchForm" class="mb-0">
+                    <div class="input-group input-group-sm" style="width: 180px;">
+                        <span class="input-group-text bg-white border-end-0 text-muted">
+                            <i class="bi bi-search"></i>
+                        </span>
+                        <input type="search"
+                               name="q"
+                               id="searchInput"
+                               value="{{ query|default:'' }}"
+                               class="form-control border-start-0"
+                               style="padding: 6px;"
+                               placeholder="Search...">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="tab-content" id="nav-tabContent">
+            {% include 'UI/course/course_list_content.html' %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("searchInput");
+    const container = document.querySelector(".tab-content");
+    let timeout = null;
+
+    input.addEventListener("input", function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            fetch(`/course/search-ajax/?q=` + encodeURIComponent(input.value))
+                .then(res => res.text())
+                .then(html => {
+                    const activeTab = document.querySelector('.nav-link.active');
+                    const activeTabId = activeTab ? activeTab.getAttribute('data-bs-target') : '#nav-courses';
+                    container.innerHTML = html;
+                    const nextActiveTab = container.querySelector(activeTabId);
+                    if (nextActiveTab) {
+                        container.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('show', 'active'));
+                        nextActiveTab.classList.add('show', 'active');
+                    }
+                })
+                .catch(err => console.error("AJAX Search Error:", err))
+                .finally(() => {
+                    document.body.style.cursor = 'default';
+                });
+        }, 300);
+    });
+});
+</script>

@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block main_title %}
+Superadmin Dashboard
+{% endblock %}
+
+{% block main_content %}
+<div class="dashboard-wrapper">
+    <div
+        class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
+        <div>
+            <h1 class="text-[var(--color-primary)] fw-bold mb-1">
+                Superadmin Dashboard
+            </h1>
+            <p class="text-muted mb-0">
+                Overview of the system performance and management.
+            </p>
+        </div>
+    </div>
+
+    <!-- Statistics Grid -->
+    <div
+        class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3 mb-3">
+        {% for card in dashboard_cards %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border rounded-3">
+                <div class="card-body p-1">
+                    <!-- icon -->
+                    <div
+                        class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="p-2 rounded-3"
+                            style="background-color: {{ card.bg }};">
+                            <i class="bi {{ card.icon }} fs-4"></i>
+                        </div>
+                    </div>
+                    <!-- label -->
+                    <h6 class="text-muted text-uppercase small fw-bold mb-1">
+                        {{ card.label }}
+                    </h6>
+                    <!-- value -->
+                    <h3 class="fw-bold mb-0"
+                        style="color: var(--color-secondary);">
+                        {{ card.value }}
+                    </h3>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Action Management Grid -->
+    <h5 class="fw-bold mb-3" style="color: var(--color-secondary);">
+        Quick Actions
+    </h5>
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+        <!-- User Management Card -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border rounded-3">
+                <div class="card-body p-2 d-flex flex-column">
+                    <div class="mb-3 text-[var(--color-primary)]">
+                        <i class="bi bi-person-plus fs-2"></i>
+                    </div>
+                    <h4 class="card-title fw-bold">User Registration</h4>
+                    <p class="text-muted small">Onboard new students or teachers
+                        by creating their accounts.</p>
+                    <div
+                        class="mt-auto pt-3 border-top d-flex gap-2 justify-content-around">
+                        <a href="{% url 'student_register' %}"
+                            class="fw-bold border-1 "
+                            style="color: var(--color-primary);">
+                            <i class="bi bi-plus ms-1"></i> Student
+                        </a>
+                        <a href="{% url 'teacher_register' %}"
+                            class="fw-bold border-1 "
+                            style="color: var(--color-primary);">
+                            <i class="bi bi-plus ms-1"></i> Teacher
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Management Card -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border rounded-3">
+                <div class="card-body p-2 d-flex flex-column">
+                    <div class="mb-3">
+                        <i class="bi bi-journal-check fs-2"
+                            style="color: var(--color-primary);"></i>
+                    </div>
+                    <h4 class="card-title fw-bold">Course Management</h4>
+                    <p class="text-muted small">
+                        Manage academic curriculum, syllabi, and student
+                        assignments.
+                    </p>
+                    <div class="mt-auto pt-3 border-top text-center">
+                        <a href="{% url 'course_dashboard' %}"
+                            class="text-decoration-none fw-bold"
+                            style="color: var(--color-primary);">
+                            View Dashboard
+                            <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Department Management Card -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border rounded-3">
+                <div class="card-body p-2 d-flex flex-column">
+                    <div class="mb-3">
+                        <i class="bi bi-diagram-3 fs-2"
+                            style="color: var(--color-primary);"></i>
+                    </div>
+                    <h4 class="card-title fw-bold">Departments</h4>
+                    <p class="text-muted small">
+                        Configure institutional departments and faculty
+                        assignments.
+                    </p>
+                    <div class="mt-auto pt-3 border-top text-center">
+                        <a href="{% url 'department_dashboard' %}"
+                            class="text-decoration-none fw-bold"
+                            style="color: var(--color-primary);">
+                            Manage Departments
+                            <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

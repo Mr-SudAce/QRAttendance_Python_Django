@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main_content %}
+<link rel="stylesheet" href="{% static 'CSS/main.css' %}">
+
+<div style="font-family: 'Poppins', sans-serif; max-width: 800px; margin: 2rem auto;">
+    <div class="card" style="padding: 0; overflow: hidden; border: none; background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lg);">
+        <!-- Profile Header -->
+        <div style="background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 80%); padding: 1.5rem 2rem; text-align: center; color: var(--white);">
+            <div style="width: 100px; height: 100px; background: rgba(255,255,255,0.2); border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; border: 4px solid rgba(255,255,255,0.3); font-size: 2.5rem; font-weight: 700;">
+                {{ teacher.first_name|slice:":1"|upper }}{{ teacher.last_name|slice:":1"|upper }}
+            </div>
+            <h2 style="margin: 0; font-size: 1.8rem; font-weight: 600;">{{ teacher.get_full_name|default:teacher.username }}</h2>
+            <p style="opacity: 0.9; margin-top: 0.5rem; font-weight: 300; letter-spacing: 0.5px;">Teacher</p>
+            <div style="font-size: 0.75rem; color: var(--color-secondary); font-style: italic; text-align: right; ">Joined {{ teacher.date_joined|date:"F Y" }}</div>
+        </div>
+
+        <!-- Profile Details -->
+        <div style="padding: 2.5rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2.5rem;">
+                <!-- Left Side: Basic Info -->
+                <div>
+                    <h4 style="color: var(--color-primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem; border-bottom: 2px solid var(--bg-color); padding-bottom: 0.5rem;">Personal Information</h4>
+                    <div style="margin-bottom: 1.2rem;">
+                        <label style="display: block; font-size: 0.75rem; color: var(--color-secondary); font-weight: 600; margin-bottom: 0.2rem;">Username</label>
+                        <div style="color: var(--text-dark); font-weight: 500;">{{ teacher.username }}</div>
+                    </div>
+                    <div style="margin-bottom: 1.2rem;">
+                        <label style="display: block; font-size: 0.75rem; color: var(--color-secondary); font-weight: 600; margin-bottom: 0.2rem;">Email Address</label>
+                        <div style="color: var(--text-dark); font-weight: 500;">{{ teacher.email|default:"N/A" }}</div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Professional Info -->
+                <div>
+                    <h4 style="color: var(--color-primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem; border-bottom: 2px solid var(--bg-color); padding-bottom: 0.5rem;">Professional Details</h4>
+                    <div style="margin-bottom: 1.2rem;">
+                        <label style="display: block; font-size: 0.75rem; color: var(--color-secondary); font-weight: 600; margin-bottom: 0.2rem;">Department</label>
+                        <div style="color: var(--text-dark); font-weight: 500;">{{ teacher.course_assignments.first.course.department.name|default:"Not Assigned" }}</div>
+                    </div>
+                    <div style="margin-bottom: 1.2rem;">
+                        <label style="display: block; font-size: 0.75rem; color: var(--color-secondary); font-weight: 600; margin-bottom: 0.2rem;">Assigned Subjects</label>
+                        <div style="color: var(--text-dark); font-weight: 500; font-size: 0.9rem;">
+                            {% for assignment in teacher.course_assignments.all %}
+                                <span style="display: inline-block; background: var(--bg-color); padding: 2px 8px; border-radius: 4px; margin: 2px; border: 1px solid var(--border-color);">{{ assignment.course.name }}</span>
+                            {% empty %}
+                                No subjects assigned
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                <a href="{% url 'teacher_dashboard' %}" class="btn" style="background-color: var(--bg-color); color: var(--color-primary); border: 1px solid var(--border-color); font-size: 0.85rem; font-weight: 600; text-decoration: none; padding: 0.5rem 1rem; border-radius: var(--radius);">
+                    &larr; Back to Dashboard
+                </a>
+                <a href="{% url 'teacher_dashboard' %}" class="btn" style="background-color: var(--color-primary); color: var(--white); border: 1px solid var(--color-primary); font-size: 0.85rem; font-weight: 600;">
+                    Change Password
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

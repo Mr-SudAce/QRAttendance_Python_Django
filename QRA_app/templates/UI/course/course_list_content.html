@@ -1,0 +1,110 @@
+<!-- Courses Tab -->
+<div class="tab-pane fade show active" id="nav-courses" role="tabpanel">
+    <div class="table-responsive" style="max-height: 420px; overflow-y: auto;">
+        <table class="table table-hover align-middle mb-0 border-top">
+            <thead class="table-light sticky-top" style="top: 0; z-index: 10;">
+                <tr>
+                    <th class="ps-4" style="width: 15%;">Code</th>
+                    <th style="width: 35%;">Name</th>
+                    <th style="width: 30%;">Department</th>
+                    <th class="text-center" style="width: 20%;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td class="ps-4">
+                        <span class="badge bg-light text-primary border">{{ course.code }}</span>
+                    </td>
+                    <td class="fw-semibold text-dark">{{ course.name }}</td>
+                    <td class="text-secondary small">{{ course.department.name }}</td>
+                    <td class="text-center" style="white-space: nowrap; vertical-align: middle;">
+                        <div class="d-inline-flex align-items-center gap-1">
+
+                            <a href="{% url 'course_detail' course.id %}"
+                                class="btn btn-sm btn-outline-info p-1 p-md-2"
+                                title="View">
+                                <i class="bi bi-eye"></i>
+                            </a>
+
+                            <a href="{% url 'course_edit' course.id %}"
+                                class="btn btn-sm btn-outline-warning p-1 p-md-2"
+                                title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+                            <form action="{% url 'course_delete' course.id %}"
+                                method="post"
+                                class="m-0 d-inline">
+                                {% csrf_token %}
+                                <button type="submit"
+                                    class="btn btn-sm btn-outline-danger p-1 p-md-2"
+                                    onclick="return confirm('Delete this course?')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center py-5 text-muted">
+                        <i class="bi bi-search fs-2 d-block mb-2"></i>
+                        {% if query %}
+                            No courses matching "<strong>{{ query }}</strong>" found.
+                        {% else %}
+                            No courses registered yet.
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Assignments Tab -->
+<div class="tab-pane fade" id="nav-assignments" role="tabpanel">
+    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+        <table class="table table-hover align-middle mb-0 border-top">
+            <thead class="table-light sticky-top" style="top: 0; z-index: 10;">
+                <tr>
+                    <th class="ps-4">Course</th>
+                    <th>Faculty Member</th>
+                    <th class="text-center">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in assignments %}
+                <tr>
+                    <td class="ps-4 fw-medium text-dark">{{ assignment.course.name }}</td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-primary text-white rounded-circle me-2 d-flex align-items-center justify-content-center"
+                                 style="width: 28px; height: 28px; font-size: 0.75rem; font-weight: bold;">
+                                {{ assignment.teacher.username|slice:":1"|upper }}
+                            </div>
+                            <span>{{ assignment.teacher.get_full_name|default:assignment.teacher.username }}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3">Active</span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center py-5 text-muted">
+                        <i class="bi bi-search fs-2 d-block mb-2"></i>
+                        {% if query %}
+                            No assignments found for "<strong>{{ query }}</strong>".
+                        {% else %}
+                            No faculty assignments found.
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

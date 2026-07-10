@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="{% static 'logo/EDUQR.png' %}"
+            type="image/x-icon">
+        <title>{% block main_title %}{% endblock %} | EduTrack QR</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="{% static 'CSS/index.css' %}">
+    </head>
+    <body>
+        <div class="container-fluid p-0">
+            <!-- Navbar -->
+            {% block navbar %}
+                {% include 'UI/navbar.html' %}
+            {% endblock %}
+        </div>
+
+        <div class="container">
+            {% if messages %}
+            {% for message in messages %}
+            <div
+                style="position: fixed; z-index: 9999; top: 80px; right: 20px; min-width: 300px;"
+                class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% else %}info{% endif %} alert-dismissible fade show auto-alert"
+                role="alert">
+                <i class="bi {% if message.tags == 'error' %}bi-exclamation-circle{% elif message.tags == 'success' %}bi-check-circle{% else %}bi-info-circle{% endif %} me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            {% block main_content %}
+
+            {% endblock %}
+        </div>
+
+        <script>
+        setTimeout(() => {
+            document.querySelectorAll('.auto-alert').forEach(alert => {
+                alert.classList.remove('show');
+                alert.classList.add('fade');
+
+                setTimeout(() => {
+                    alert.remove();
+                }, 500); // smooth fade-out
+            });
+        }, 3500); // 3.5 seconds
+    </script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

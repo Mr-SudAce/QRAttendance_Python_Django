@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block main_title %}Superuser Login{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block main_content %}
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+<link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+<div class="container d-flex align-items-center justify-content-center m-auto"
+    style="height: 96vh;">
+    <div class="card border-0 shadow-lg overflow-hidden w-100 p-0"
+        style="max-width: 1000px; border-radius: 20px;">
+        <div class="row g-0 " style="max-height: 90vh;">
+
+            <!-- Left Panel: High Security Root Terminal (Hidden on mobile) -->
+            <div
+                class="col-lg-5 d-none d-lg-flex flex-column justify-content-between p-5 text-white"
+                style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-4">
+                        <i class="bi bi-terminal-fill fs-3 text-danger"></i>
+                        <span
+                            class="fw-bold tracking-wider text-uppercase small text-danger">Root
+                            Admin Access</span>
+                    </div>
+                    <h3 class="fw-bold lh-sm mb-3">Core Infrastructure
+                        Configuration</h3>
+                    <p class="text-white-50 small">System-wide terminal
+                        override. Every operation performed within this session
+                        is cryptographically logged to the security audit
+                        trails.</p>
+                </div>
+
+                <!-- Terminal-like System Log Metric Widget -->
+                <div class="my-4 p-3 rounded-3"
+                    style="background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.05); font-family: monospace;">
+                    <div
+                        class="d-flex align-items-center gap-2 mb-2 text-white-50"
+                        style="font-size: 0.75rem;">
+                        <span class="spinner-grow spinner-grow-sm text-danger"
+                            role="status"></span>
+                        <span>SECURE AUDIT PIPELINE ACTIVE</span>
+                    </div>
+                    <div class="text-danger small" style="font-size: 0.7rem;">
+                        &gt; status: 0x889FA2A1<br>
+                        &gt; integrity_check: PASS<br>
+                        &gt; ip_tracking: BOUND
+                    </div>
+                </div>
+
+                <div class="text-white-50" style="font-size: 0.8rem;">
+                    <i
+                        class="bi bi-exclamation-triangle-fill text-danger me-1"></i>
+                    Authorized Personnel Only
+                </div>
+            </div>
+
+            <!-- Right Panel: Login Credentials Input -->
+            <div
+                class="col-lg-7 p-4 p-md-5 bg-white d-flex flex-column justify-content-center">
+                <div class="mb-4">
+                    <h2 class="fw-bold text-dark mb-1">Terminal
+                        Authentication</h2>
+                    <p class="text-muted small">Elevated credentials required to
+                        initialize superuser session state.</p>
+                </div>
+
+                <form method="POST" action="{% url 'superuser_login' %}">
+                    {% csrf_token %}
+
+                    <!-- Security Identifier Input -->
+                    <div class="mb-3">
+                        <label for="identifier"
+                            class="form-label text-muted small fw-medium">Root
+                            Identifier (User / Email / Phone)</label>
+                        <div class="input-group">
+                            <span
+                                class="input-group-text bg-light border-end-0 text-muted"><i
+                                    class="bi bi-shield-lock-fill"></i></span>
+                            <input type="text" id="identifier" name="identifier"
+                                required
+                                class="form-control bg-light border-start-0 ps-0"
+                                placeholder="Username or system email">
+                        </div>
+                    </div>
+
+                    <!-- Token Key / Password Input -->
+                    <div class="mb-4">
+                        <label for="password"
+                            class="form-label text-muted small fw-medium">Master
+                            Authorization Key</label>
+                        <div class="input-group">
+                            <span
+                                class="input-group-text bg-light border-end-0 text-muted"><i
+                                    class="bi bi-incognito"></i></span>
+                            <input type="password" id="password" name="password"
+                                required
+                                class="form-control bg-light border-start-0 ps-0"
+                                placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <!-- Execute / Authenticate Action -->
+                    <button type="submit"
+                        class="btn text-white w-100 py-2.5 fw-semibold shadow-sm border-0"
+                        style="background: #0f172a; transition: background 0.2s;">
+                        <i class="bi bi-lightning-charge-fill me-1"></i>
+                        Authenticate Session
+                    </button>
+                </form>
+
+                <!-- System Notice Instead of Registration Link -->
+                <div class="text-center mt-5 pt-3 border-top">
+                    <p class="text-muted"
+                        style="font-size: 0.75rem; letter-spacing: 0.3px;">
+                        <i class="bi bi-info-circle me-1"></i> For access
+                        recovery, contact the network hardware administrator.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

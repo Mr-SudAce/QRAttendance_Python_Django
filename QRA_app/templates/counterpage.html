@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="lockout-wrapper" style="min-height: 80vh; display: flex; justify-content: center; align-items: center; padding: 2rem;">
+    <div class="card lockout-card" style="max-width: 450px; width: 100%; text-align: center;">
+        <h1 style="color: var(--color-primary); font-weight: 700; margin-bottom: 1.5rem;">Security Lockout</h1>
+        
+        <p class="text-secondary">
+            Access is temporarily disabled after <b>{{ max_attempts }}</b> failed attempts to protect your account.
+        </p>
+        
+        <div class="timer" style="font-size: 3.5rem; font-weight: 800; margin: 1.5rem 0; color: var(--color-primary); background: var(--bg-color); padding: 1rem; border-radius: var(--radius); font-family: 'Monaco', 'Consolas', monospace; letter-spacing: 2px;">
+            <span id="minutes">00</span>:<span id="seconds">00</span>
+        </div>
+
+        <div class="info" style="color: var(--color-secondary); font-size: 0.95rem;">
+            <p>Please wait a moment before trying again.</p>
+            <small>Total lock duration: {{ lock_minutes }} minute(s)</small>
+        </div>
+
+        <p class="mt-4 text-muted" style="font-size: 0.8rem;">This page will refresh automatically.</p>
+    </div>
+</div>
+
+<script>
+    let totalSeconds = {{ remaining_seconds|default:0 }};
+    let hasRedirected = false;
+
+    const minEl = document.getElementById("minutes");
+    const secEl = document.getElementById("seconds");
+
+    function updateTimer() {
+
+        let minutes = Math.floor(totalSeconds / 60);
+        let seconds = totalSeconds % 60;
+
+        minEl.textContent = String(minutes).padStart(2, "0");
+        secEl.textContent = String(seconds).padStart(2, "0");
+
+        if (totalSeconds <= 0 && !hasRedirected) {
+            hasRedirected = true;
+
+            // Redirect to login page only once
+            window.location.href = "{% url redirect_url_name %}";
+            return;
+        }
+
+        totalSeconds--;
+        setTimeout(updateTimer, 1000);
+    }
+
+    updateTimer();
+</script>
+{% endblock %}

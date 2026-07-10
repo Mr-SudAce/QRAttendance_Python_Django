@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block main_title %}
+    Attendance Session
+{% endblock %}
+
+{% block main_content %}
+<div class="container" style="display: flex; justify-content: center; align-items: center; min-height: 70vh; padding: 1rem;">
+    <div class="card" style="max-width: 450px; width: 100%; text-align: center; padding: 2.5rem;">
+        <h1 style="color: var(--color-primary); font-weight: 700; margin-bottom: 0.5rem;">Attendance Session</h1>
+        <p style="color: var(--color-secondary); margin-bottom: 2rem; font-size: 0.95rem;">Students can scan the code below to mark their attendance.</p>
+
+        <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 2rem; display: inline-block; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);">
+            {% if qr_data %}
+            <img
+                src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={{ qr_data }}"
+                alt="Attendance QR Code"
+                style="display: block; max-width: 100%; height: auto; border-radius: 4px; border: 4px solid var(--white);">
+            {% else %}
+            <div style="padding: 2rem; color: var(--color-secondary);">
+                <p>No QR Code Available</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div style="margin-bottom: 2.5rem;">
+            <div style="font-size: 1.1rem; color: var(--text-dark); margin-bottom: 0.5rem; font-weight: 500;">
+                Live Attendance: <span id="count" style="color: var(--color-accent); font-weight: 700; font-size: 2rem; margin-left: 0.5rem;">0</span>
+            </div>
+            <p style="color: var(--color-secondary); font-size: 0.9rem;">
+                Session expires at: <span style="font-weight: 600; color: var(--text-dark);">{{ session.expires_at|date:"H:i A" }}</span>
+            </p>
+        </div>
+
+        <a href="{% url 'close_session' session.id %}" style="text-decoration: none;">
+            <button class="btn" style="background-color: #ef4444; color: white; width: 100%; font-weight: 600; padding: 0.8rem; border-radius: var(--radius);">Close Session</button>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+        <h1>Attendance Session</h1>
+
+        {% if qr_data %}
+        <img
+            src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ qr_data }}">
+        {% else %}
+        <p>no qr</p>
+        {% endif %}
+
+        <p>Session expires: {{ session.expires_at }}</p>
+        <a href="{% url 'close_session' session.id %}">
+            <button>Close Session</button>
+        </a>
+
+    </body>
+</html>

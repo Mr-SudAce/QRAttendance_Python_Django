@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block main_title %}
+Teacher Dashboard
+{% endblock %}
+
+{% block main_content %}
+<div class="dashboard-wrapper"
+    style="margin: 0 auto; padding: 2rem;">
+    <!-- Header Section -->
+    <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem;">
+        <h1
+            style="color: var(--color-primary); font-weight: 700; margin: 0;">Teacher Dashboard</h1>
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="{% url 'teacher_profile' %}" class="btn"
+                style="background-color: var(--bg-color); color: var(--color-primary); border: 1px solid var(--color-primaryp); font-size: 0.9rem; padding: 0.5rem 1rem; text-decoration: none; border-radius: var(--radius); display: flex; align-items: center; gap: 0.5rem;">
+                <i class="bi bi-person-circle"></i> View Profile
+            </a>
+            <a href="{% url 'attendance_history_course' %}" class="btn"
+                style="border: 1px solid var(--color-primary); color: var(--color-primary);  font-size: 0.9rem; padding: 0.5rem 1rem;">History</a>
+        </div>
+    </div>
+
+    <h2 style="color: var(--color-secondary); font-size: 1.25rem; margin-bottom: 1.5rem; font-weight: 600;">
+        Your Assigned Classes
+    </h2>
+
+    {% block attendancehistory %}{% endblock %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+        {% for course in courses %}
+        <div class="card"
+            style="margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 1.5rem;">
+            <div>
+                <h3
+                    style="color: var(--text-dark); margin-bottom: 0.5rem; font-size: 1.2rem;">
+                    {{course.name|default:course }}</h3>
+                <p
+                    style="color: var(--color-secondary); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                    Code: {{ course.code|default:"N/A" }}
+                </p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; margin-top: auto;">
+                <a href="{% url 'create_session' course.id %}" 
+                   style="flex: 1; text-align: center; text-decoration: none; background: var(--color-primary); color: white; padding: 0.7rem 0.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                    <i class="bi bi-play-circle"></i> Start
+                </a>
+                <a href="{% url 'course_detail' course.id %}" 
+                   style="flex: 1; text-align: center; text-decoration: none; background: transparent; color: var(--color-primary); border: 1px solid var(--color-primary); padding: 0.7rem 0.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                    <i class="bi bi-info-circle"></i> Details
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div
+            style="grid-column: 1/-1; text-align: center; padding: 3rem; background: var(--white); border-radius: var(--radius); border: 1px dashed var(--border-color);">
+            <p style="color: var(--color-secondary); margin: 0;">No courses
+                assigned to your profile yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div
+        style="margin-top: 3rem; text-align: center; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+        <a href="{% url 'course_dashboard' %}"
+            style="color: var(--color-secondary); font-size: 0.9rem; text-decoration: none; font-weight: 500;">
+            View Full Course Dashboard &rarr;
+        </a>
+    </div>
+</div>
+{% endblock %}

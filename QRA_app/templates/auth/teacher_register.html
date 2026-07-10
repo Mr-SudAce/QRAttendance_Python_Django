@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block main_title %}Teacher Register{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block main_content %}
+<!-- Bootstrap 5 & Bootstrap Icons for Tech UI Elements -->
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+<link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+<div class="container d-flex align-items-center justify-content-center m-auto"
+    style="height: 96vh;">
+    <div class="card border-0 shadow-lg overflow-hidden w-100 p-0"
+        style="max-width: 1000px; border-radius: 20px;">
+        <div class="row g-0 " style="max-height: 90vh;">
+
+            <!-- Left Panel: QR Faculty Identity Context (Hidden on small screens) -->
+            <div
+                class="col-lg-5 d-none d-lg-flex flex-column justify-content-between p-5 text-white position-relative"
+                style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);">
+
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-4">
+                        <i class="bi bi-qr-code-scan fs-3 text-warning"></i>
+                        <span
+                            class="fw-bold tracking-wider text-uppercase small">Faculty
+                            Admin Console</span>
+                    </div>
+                    <h2 class="fw-bold lh-sm mb-3">Secure Terminal
+                        Gatekeeper.</h2>
+                    <p class="text-white-50 small">Register your faculty profile
+                        to generate administrative QR override tokens and access
+                        the management hub dashboards.</p>
+                </div>
+
+                <!-- Live Mockup Graphic -->
+                <div
+                    class="my-4 p-4 rounded-4 text-center border border-white-10"
+                    style="background: rgba(255,255,255,0.06); backdrop-filter: blur(10px);">
+                    <div
+                        class="bg-white p-3 d-inline-block rounded-3 mb-3 shadow-sm">
+                        <!-- Abstract QR placeholder using pure Bootstrap grid -->
+                        <div class="d-flex flex-column gap-1"
+                            style="width: 100px; height: 100px; opacity: 0.85;">
+                            <div class="d-flex gap-1 flex-grow-1">
+                                <div class="bg-dark rounded-1"
+                                    style="width: 30px; height: 30px;"></div>
+                                <div
+                                    class="bg-dark flex-grow-1 rounded-1"></div>
+                                <div class="bg-dark rounded-1"
+                                    style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <div class="bg-dark flex-grow-1 rounded-1"></div>
+                            <div class="d-flex gap-1 flex-grow-1">
+                                <div class="bg-dark rounded-1"
+                                    style="width: 30px; height: 30px;"></div>
+                                <div
+                                    class="bg-dark flex-grow-1 rounded-1"></div>
+                                <div class="bg-dark rounded-1"
+                                    style="width: 20px; height: 20px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="small fw-semibold">Faculty Administrative
+                        Token</div>
+                    <div class="text-white-50"
+                        style="font-size: 0.75rem;">Encrypted & Logged Entry
+                        Authorization</div>
+                </div>
+
+                <div class="text-white-50" style="font-size: 0.8rem;">
+                    <i class="bi bi-shield-lock-fill text-warning me-1"></i>
+                    Multi-Terminal Privilege Control
+                </div>
+            </div>
+
+            <!-- Right Panel: The Form -->
+            <div class="col-lg-7 p-4 p-md-5 bg-white">
+                <div class="mb-4">
+                    <h3 class="fw-bold text-dark mb-1">Faculty Portal
+                        Registration</h3>
+                    <p class="text-muted small">Please complete the
+                        configuration profile below to setup your terminal
+                        account.</p>
+                </div>
+
+                <form method="POST" action="{% url 'teacher_register' %}"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Full Name Block -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label for="first_name"
+                                class="form-label text-muted small fw-medium">First
+                                Name</label>
+                            <div class="input-group">
+                                <span
+                                    class="input-group-text bg-light border-end-0 text-muted"><i
+                                        class="bi bi-person-workspace"></i></span>
+                                <input type="text" id="first_name"
+                                    name="first_name" required
+                                    class="form-control bg-light border-start-0 ps-0"
+                                    placeholder="Jane">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label for="last_name"
+                                class="form-label text-muted small fw-medium">Last
+                                Name</label>
+                            <input type="text" id="last_name" name="last_name"
+                                required class="form-control bg-light"
+                                placeholder="Smith">
+                        </div>
+                    </div>
+
+                    <!-- Contact Details Block -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-6">
+                            <label for="email"
+                                class="form-label text-muted small fw-medium">Official
+                                Institution Email</label>
+                            <div class="input-group">
+                                <span
+                                    class="input-group-text bg-light border-end-0 text-muted"><i
+                                        class="bi bi-envelope-at"></i></span>
+                                <input type="email" id="email" name="email"
+                                    required
+                                    class="form-control bg-light border-start-0 ps-0"
+                                    placeholder="faculty@domain.com">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="phone_number"
+                                class="form-label text-muted small fw-medium">Phone
+                                Number</label>
+                            <div class="input-group">
+                                <span
+                                    class="input-group-text bg-light border-end-0 text-muted"><i
+                                        class="bi bi-telephone"></i></span>
+                                <input type="number" id="phone_number"
+                                    name="phone_number"
+                                    class="form-control bg-light border-start-0 ps-0"
+                                    placeholder="98XXXXXXXX">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Address Block -->
+                    <div class="mb-3">
+                        <label for="address"
+                            class="form-label text-muted small fw-medium">Office/Permanent
+                            Address</label>
+                        <div class="input-group">
+                            <span
+                                class="input-group-text bg-light border-end-0 text-muted"><i
+                                    class="bi bi-geo-alt"></i></span>
+                            <input type="text" id="address" name="address"
+                                class="form-control bg-light border-start-0 ps-0"
+                                placeholder="Department, Block / City">
+                        </div>
+                    </div>
+
+                    <!-- Identity Assets Block -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6">
+                            <label for="profile_picture"
+                                class="form-label text-muted small fw-medium">Faculty
+                                Profile Photo <span class="text-teal"
+                                    style="color: #0f766e;">(For Dashboard
+                                    Identity)</span></label>
+                            <input type="file" id="profile_picture"
+                                name="profile_picture"
+                                class="form-control bg-light text-muted small">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="password"
+                                class="form-label text-muted small fw-medium">Secure
+                                Password</label>
+                            <div class="input-group">
+                                <span
+                                    class="input-group-text bg-light border-end-0 text-muted"><i
+                                        class="bi bi-lock"></i></span>
+                                <input type="password" id="password"
+                                    name="password" required
+                                    class="form-control bg-light border-start-0 ps-0"
+                                    placeholder="••••••••">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button type="submit"
+                        class="btn w-100 py-2.5 fw-semibold border-0 shadow-sm d-flex align-items-center justify-content-center gap-2 text-white"
+                        style="background: var(--color-primary); transition: background 0.2s;">
+                        <i class="bi bi-shield-check"></i> Initialize Account &
+                        QR Privileges
+                    </button>
+                </form>
+
+                <!-- Footer Link -->
+                <div class="text-center mt-4 pt-3 border-top">
+                    <p class="text-muted small mb-0">Already registered a
+                        console profile?
+                        <a href="{% url 'teacher_login' %}"
+                            class="text-decoration-none fw-semibold"
+                            style="color: #0f766e;">Login Here</a>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
