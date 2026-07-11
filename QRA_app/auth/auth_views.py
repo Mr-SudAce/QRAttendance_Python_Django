@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import (
@@ -298,8 +299,40 @@ def password_reset_confirm(request, uidb64=None, token=None):
                 return redirect("password_reset_complete")
         else:
             form = SetPasswordForm(user)
+            print('form data:::::::::::::::::::::::::', form.data)
         return render(
-            request, "auth/registration/password_reset_confirm.html", {"form": form}
+            request, "auth/resetpw/password_reset_confirm.html", {"form": form}
         )
     else:
-        return render(request, "auth/registration/password_reset_invalid.html")
+        return render(request, "auth/resetpw/password_reset_invalid.html")
+    
+    
+def password_reset_request(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        CustomUser = get_user_model() # Changed to CustomUser to prevent variable clashing
+        associated_users = CustomUser.objects.filter(email=email)
+
+        if associated_users.exists():
+            for single_user in associated_users: # Changed to single_user for absolute clarity
+                # 1. Generate the secure tokens
+                uid = urlsafe_base64_encode(force_bytes(single_user.pk))
+                token = default_token_generator.make_token(single_user)
+
+                # 2. Build the full local link
+                # Note: Make sure BASE_URL ends with a slash, or use: f"{BASE_URL}/reset/{uid}/{token}/"
+                reset_link = f"{os.getenv('BASE_URL')}/reset/{uid}/{token}/" 
+
+                # 3. Pass the data directly to the "Done" template
+                context = {
+                    'username': single_user.username,
+                    'reset_link': reset_link,
+                    'user_email': single_user.email,
+                    'trigger_email': True
+                }
+                return render(request, "auth/resetpw/password_reset_done.html", context)
+        
+        # If no user found, still redirect to prevent user enumeration
+        return render(request, "auth/resetpw/password_reset_done.html", {'trigger_email': False})
+        
+    return render(request, "auth/resetpw/password_reset_form.html")
