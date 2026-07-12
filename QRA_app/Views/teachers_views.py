@@ -89,3 +89,44 @@ def attendance_history_course(request):
             "course_attendance": course_attendance
         }
     )
+
+@teacher_required
+def manage_roster(request, course_id):
+    course = get_object_or_404(
+        CourseModel, id=course_id, courseassignment__teacher=request.user
+    )
+    enrollments = EnrollmentModel.objects.filter(course=course).select_related("student")
+    enrolled_ids = enrollments.values_list("student_id", flat=True)
+    available_students = User.objects.filter(role="student").exclude(id__in=enrolled_ids)
+    return render(
+        request,
+        "UI/teacher/manage_roster.html",
+        {
+            "course": course,
+            "enrollments": enrollments,
+            "available_students": available_students,
+        },
+    )
+
+
+@teacher_required
+def enroll_student(request, course_id):
+    course = get_object_or_404(
+        CourseModel, id=course_id, courseassignment__teacher=request.user
+    )
+    if request.method == "POST":
+        student_id = request.POST.get("student_id")
+        student = get_object_or_404(User, id=student_id, role="student")
+        EnrollmentModel.objects.get_or_create(student=student, course=course)
+    return redirect("manage_roster", course_id=course.id)
+
+
+@teacher_required
+def remove_student(request, course_id, enrollment_id):
+    course = get_object_or_404(
+        CourseModel, id=course_id, courseassignment__teacher=request.user
+    )
+    enrollment = get_object_or_404(EnrollmentModel, id=enrollment_id, course=course)
+    if request.method == "POST":
+        enrollment.delete()
+    return redirect("manage_roster", course_id=course.id)

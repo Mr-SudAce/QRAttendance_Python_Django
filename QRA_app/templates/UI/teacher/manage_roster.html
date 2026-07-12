@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block main_title %}
+Manage Roster
+{% endblock %}
+
+{% block main_content %}
+<div class="dashboard-wrapper" style="margin: 0 auto; padding: 2rem;">
+
+    <div style="margin-bottom: 2rem;">
+        <h1 style="color: var(--color-primary); font-weight: 700; margin: 0 0 0.25rem;">
+            Manage Roster
+        </h1>
+        <p style="color: var(--color-secondary); margin: 0;">
+            {{ course.name }} ({{ course.code }})
+        </p>
+    </div>
+
+    <div class="card" style="padding: 1.5rem; margin-bottom: 2rem;">
+        <h3 style="color: var(--text-dark); font-size: 1.05rem; margin-bottom: 1rem;">Add Student</h3>
+        <form method="POST" action="{% url 'enroll_student' course.id %}" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            {% csrf_token %}
+            <select name="student_id" required
+                style="flex: 1; min-width: 220px; padding: 0.6rem; border-radius: var(--radius); border: 1px solid var(--border-color);">
+                <option value="" disabled selected>Select a student</option>
+                {% for student in available_students %}
+                <option value="{{ student.id }}">{{ student.username }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit"
+                style="background: var(--color-primary); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: var(--radius); font-weight: 600; cursor: pointer;">
+                <i class="bi bi-person-plus"></i> Enroll
+            </button>
+        </form>
+    </div>
+
+    <div class="card" style="padding: 1.5rem;">
+        <h3 style="color: var(--text-dark); font-size: 1.05rem; margin-bottom: 1rem;">
+            Enrolled Students ({{ enrollments.count }})
+        </h3>
+        {% for enrollment in enrollments %}
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border-color);">
+            <span style="color: var(--text-dark);">{{ enrollment.student.username }}</span>
+            <form method="POST" action="{% url 'remove_student' course.id enrollment.id %}">
+                {% csrf_token %}
+                <button type="submit"
+                    style="background: transparent; color: #d32f2f; border: 1px solid #d32f2f; padding: 0.4rem 0.8rem; border-radius: var(--radius); font-size: 0.8rem; cursor: pointer;">
+                    Remove
+                </button>
+            </form>
+        </div>
+        {% empty %}
+        <p style="color: var(--color-secondary); margin: 0;">No students enrolled yet.</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

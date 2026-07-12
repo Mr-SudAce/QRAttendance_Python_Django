@@ -10,7 +10,7 @@
         <h1 style="color: var(--color-primary); font-weight: 700; margin-bottom: 0.5rem;">Attendance Session</h1>
         <p style="color: var(--color-secondary); margin-bottom: 2rem; font-size: 0.95rem;">Students can scan the code below to mark their attendance.</p>
 
-        <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 2rem; display: inline-block; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);">
+        <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 2rem; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.05);">
             {% if qr_data %}
             <img
                 src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={{ qr_data }}"
