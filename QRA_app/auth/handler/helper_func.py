@@ -1,3 +1,4 @@
+from django.contrib import messages
 from datetime import datetime, timedelta
 from django.utils import timezone
 from django.shortcuts import redirect, render
@@ -40,23 +41,23 @@ def clear_login_attempts(request):
 
 def get_user_by_identifier(identifier):
     if not identifier:
-        print("No credentials provided.")
+        messages.error("No credentials provided.")
         return None
     try:
         return User.objects.get(username=identifier)
     except User.DoesNotExist:
         message = f"User with username '{identifier}' does not exist."
-        print(message)
+        messages.error(message)
 
     try:
         return User.objects.get(email=identifier)
     except User.DoesNotExist:
         message = f"User with email '{identifier}' does not exist."
-        print(message)
+        messages.error(message)
 
     try:
         return User.objects.get(phone_number=identifier)
     except User.DoesNotExist:
         message = f"User with phone number '{identifier}' does not exist."
-        print(message)
+        messages.error(message)
     return
