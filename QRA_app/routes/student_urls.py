@@ -14,5 +14,10 @@ urlpatterns = [
         name="attendance_history",
     ),
     path(
-        "student/profile/", students_views.student_profile, name="student_profile")
+        "student/profile/", students_views.student_profile, name="student_profile"),
+    path(
+    "student/session/<int:session_id>/status/",
+    students_views.session_status,
+    name="session_status",
+),
 ]

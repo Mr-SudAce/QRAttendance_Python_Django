@@ -2,7 +2,9 @@
 {% block main_title %}Student Dashboard{% endblock %}
 {% block main_content %}
 
+{% if is_mobile %}
 <script src="https://unpkg.com/html5-qrcode"></script>
+{% endif %}
 
 <div class="min-vh-100 d-flex flex-column">
 
@@ -53,6 +55,7 @@
                 classroom QR code</p>
         </div>
 
+        {% if is_mobile %}
         <form method="POST" action="{% url 'submit_attendance' %}"
             id="attendance-form" class="mb-5">
             {% csrf_token %}
@@ -88,9 +91,66 @@
             </div>
         </form>
 
+        {% else %}
+
+        <div class="w-100 d-flex justify-content-center p-2 mb-5">
+            <div class="position-relative p-4 rounded-5 text-center"
+                style="
+                    width: 100%;
+                    max-width: 400px;
+                    background-color: #f8f9fa;
+                    border: 1px dashed #e2e8f0;
+                ">
+
+                <!-- Corner Guides -->
+                <div class="position-absolute"
+                    style="top:16px; left:16px; width:20px; height:20px; border-top:3px solid #000; border-left:3px solid #000; border-top-left-radius:8px; z-index:10;"></div>
+
+                <div class="position-absolute"
+                    style="top:16px; right:16px; width:20px; height:20px; border-top:3px solid #000; border-right:3px solid #000; border-top-right-radius:8px; z-index:10;"></div>
+
+                <div class="position-absolute"
+                    style="bottom:16px; left:16px; width:20px; height:20px; border-bottom:3px solid #000; border-left:3px solid #000; border-bottom-left-radius:8px; z-index:10;"></div>
+
+                <div class="position-absolute"
+                    style="bottom:16px; right:16px; width:20px; height:20px; border-bottom:3px solid #000; border-right:3px solid #000; border-bottom-right-radius:8px; z-index:10;"></div>
+
+                {% if qr_code %}
+                    <img src="{{ qr_code }}" alt="Attendance QR code" class="img-fluid mb-3" style="max-width: 220px;">
+                    <p class="fw-semibold text-dark mb-1">Scan with your phone</p>
+                    <p class="text-muted small mb-0" id="status-text">Waiting for scan...</p>
+                {% else %}
+                    <i class="bi bi-qr-code-scan" style="font-size: 2.5rem; color: #adb5bd;"></i>
+                    <p class="fw-semibold text-dark mt-3 mb-1">No active session</p>
+                    <p class="text-muted small mb-0">Ask your teacher to start attendance, then refresh this page.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if session %}
+        <script>
+            const statusText = document.getElementById("status-text");
+            const poll = setInterval(() => {
+                fetch("{% url 'session_status' session.id %}")
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.marked) {
+                            clearInterval(poll);
+                            statusText.textContent = "Checked in";
+                            statusText.classList.remove("text-muted");
+                            statusText.classList.add("text-success", "fw-semibold");
+                        }
+                    });
+            }, 3000);
+        </script>
+        {% endif %}
+
+        {% endif %}
+
     </main>
 </div>
 
+{% if is_mobile %}
 <script>
         function onScanSuccess(decodedText) {
             let token = decodedText;
@@ -110,4 +170,5 @@
         });
         html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 </script>
+{% endif %}
 {% endblock %}

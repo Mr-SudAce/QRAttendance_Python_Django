@@ -49,6 +49,10 @@ Teacher Dashboard
                    style="flex: 1; text-align: center; text-decoration: none; background: transparent; color: var(--color-primary); border: 1px solid var(--color-primary); padding: 0.7rem 0.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
                     <i class="bi bi-info-circle"></i> Details
                 </a>
+                <a href="{% url 'manage_roster' course.id %}" 
+   style="flex: 1; text-align: center; text-decoration: none; background: transparent; color: var(--color-secondary); border: 1px solid var(--color-secondary); padding: 0.7rem 0.5rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+    <i class="bi bi-people"></i> Roster
+</a>
             </div>
         </div>
         {% empty %}

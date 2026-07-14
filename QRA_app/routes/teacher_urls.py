@@ -25,4 +25,19 @@ urlpatterns = [
         teachers_views.attendance_history_course,
         name="attendance_history_course",
     ),
+    path(
+        "teacher/course/<int:course_id>/roster/",
+        teachers_views.manage_roster,
+        name="manage_roster",
+    ),
+    path(
+        "teacher/course/<int:course_id>/roster/add/",
+        teachers_views.enroll_student,
+        name="enroll_student",
+    ),
+    path(
+        "teacher/course/<int:course_id>/roster/remove/<int:enrollment_id>/",
+        teachers_views.remove_student,
+        name="remove_student",
+    ),
 ]
