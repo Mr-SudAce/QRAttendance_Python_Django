@@ -61,7 +61,6 @@ def add_course(request):
         return HttpResponse("Department not found.")
 
     except Exception as e:
-        print(e)
         return HttpResponse(f"An error occurred while adding the course. {e}")
 
 

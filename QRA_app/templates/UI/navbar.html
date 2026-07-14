@@ -74,7 +74,7 @@
           <a
             class="nav-link dropdown-toggle btn btn-sm px-3 rounded-pill fw-medium d-flex align-items-center"
             href="#"
-            style="background-color: var(--color-primary); color: var(--white);"
+            style="background-color: var(--color-primary); color: var(--white)"
             id="userDropdown"
             role="button"
             data-bs-toggle="dropdown"
@@ -87,6 +87,13 @@
             aria-labelledby="userDropdown"
           >
             <li>
+              <a
+                class="dropdown-item py-2"
+                href="{% if request.user.role == 'student' %}{% url 'student_profile' %}{% elif request.user.role == 'teacher' %}{% url 'teacher_profile' %}{% endif %}"
+              >
+                <i class="bi bi-person me-2 text-muted"></i>Profile
+              </a>
+
               <a class="dropdown-item py-2" href="{% url 'change_password' %}">
                 <i class="bi bi-shield-lock me-2 text-muted"></i> Change
                 Password
